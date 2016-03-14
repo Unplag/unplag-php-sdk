@@ -1,0 +1,10 @@
+### Composer
+composer.phar
+vendor/
+
+### JetBrains IDEs
+*.iml
+.idea/
+
+### Test files
+test*

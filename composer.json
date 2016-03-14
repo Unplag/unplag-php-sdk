@@ -1,0 +1,24 @@
+{
+	"name": "Unplag/unplag-php-sdk",
+	"description": "An SDK built to facilitate application development for Unplag API 2.0+",
+	"minimum-stability": "stable",
+	"license": "MIT",
+	"keywords": [
+		"Unplag",
+		"plagiarism",
+		"sdk",
+		"php"
+	],
+	"homepage": "https://unplag.com/",
+	"require": {
+		"php": ">=5.5.0",
+		"guzzlehttp/guzzle": "^6.1.1",
+		"rybakit/msgpack": "^0.1.0",
+		"guzzlehttp/oauth-subscriber": "0.3.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Unplag\\": "src/Unplag/"
+		}
+	}
+}
