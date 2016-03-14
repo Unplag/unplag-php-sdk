@@ -39,11 +39,11 @@ class PayloadFile
 	 * @param string $path
 	 *
 	 * @return static
-	 * @throws UnplagException PATH_NOT_READABLE
+	 * @throws PayloadException
 	 */
 	static function path($path) {
 		if(!is_readable($path)) {
-			throw new PayloadException("Path $path is not readable", PayloadException::PATH_NOT_READABLE);
+			throw new PayloadException("Path $path is not readable", PayloadException::CODE_PATH_NOT_READABLE);
 		}
 		return new static($path, static::SOURCE_TYPE_PATH);
 	}
@@ -52,11 +52,11 @@ class PayloadFile
 	 * @param resource $resource
 	 *
 	 * @return static
-	 * @throws UnplagException INVALID_RESOURCE
+	 * @throws PayloadException INVALID_RESOURCE
 	 */
 	static function resource($resource) {
 		if(!is_resource($resource)) {
-			throw new PayloadException("Not valid resource $resource", PayloadException::INVALID_RESOURCE);
+			throw new PayloadException("Not valid resource $resource", PayloadException::CODE_INVALID_RESOURCE);
 		}
 		return new static($resource, static::SOURCE_TYPE_RESOURCE);
 	}
@@ -84,13 +84,13 @@ class PayloadFile
 			case static::SOURCE_TYPE_PATH:
 				$data = file_get_contents($this->getSource());
 				if($data === false) {
-					throw new PayloadException("Failed to read file at path " . $this->getSource(), PayloadException::FAILED_TO_READ_FILE);
+					throw new PayloadException("Failed to read file at path " . $this->getSource(), PayloadException::CODE_FAILED_TO_READ_FILE);
 				}
 				return $data;
 			case static::SOURCE_TYPE_RESOURCE:
 				$data = stream_get_contents($this->getSource());
 				if($data === false) {
-					throw new PayloadException("Failed to read resource ID: " . $this->getSource(), PayloadException::FAILED_TO_READ_RESOURCE);
+					throw new PayloadException("Failed to read resource ID: " . $this->getSource(), PayloadException::CODE_FAILED_TO_READ_RESOURCE);
 				}
 				return $data;
 		}
