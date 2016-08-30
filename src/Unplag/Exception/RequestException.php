@@ -5,11 +5,6 @@ use Unplag\Request;
 /**
  * Class RequestException
  * @package Unplag\Exception
- *
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 12.03.16
- * Time: 18:05
  */
 class RequestException extends \Exception implements UnplagException
 {

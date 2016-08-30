@@ -1,7 +1,6 @@
 <?php namespace Unplag;
 
 use GuzzleHttp\HandlerStack;
-
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Psr\Http\Message\ResponseInterface;
 use Unplag\Exception\ApiException;
@@ -14,14 +13,13 @@ if (!defined('UNPLAG_API_BASE_URL'))
 	define('UNPLAG_API_BASE_URL', 'https://unplag.com/api/v2/');
 }
 
-
 /**
  * Class Client
  * @package Unplag
  */
 class Client
 {
-    
+
 	protected static $keyRegex = '/^[A-z0-9]{16,32}$/';
 	protected static $secretRegex = '/^[A-z0-9]{32,64}$/';
 

@@ -3,11 +3,6 @@
 /**
  * Class PayloadException
  * @package Unplag\Exception
- *
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 12.03.16
- * Time: 17:07
  */
 class PayloadException extends \Exception implements UnplagException
 {

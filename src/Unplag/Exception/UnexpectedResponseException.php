@@ -5,11 +5,6 @@ use Unplag\Response;
 /**
  * Class UnexpectedResponseException
  * @package Unplag\Exception
- *
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 14.03.16
- * Time: 10:15
  */
 class UnexpectedResponseException extends \Exception implements UnplagException
 {
