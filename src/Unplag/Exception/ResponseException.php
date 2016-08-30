@@ -1,35 +1,63 @@
-<?php
-
-namespace Unplag\Exception;
+<?php namespace Unplag\Exception;
 
 use Unplag\Request;
 use Unplag\Response;
 
+/**
+ * Class ResponseException
+ * @package Unplag\Exception
+ */
 class ResponseException extends \Exception implements UnplagException
 {
-	const CODE_RESPONSE_PARSE_FAIL = 203;
-	const CODE_INVALID_CONTENT_TYPE = 204;
+    const CODE_RESPONSE_PARSE_FAIL = 203;
+    const CODE_INVALID_CONTENT_TYPE = 204;
 
-	protected $req;
-	protected $resp = null;
+    protected $req;
+    protected $resp = null;
 
-	public function __construct($message, $code, \Exception $previous = null, Request $request, Response $response = null)
-	{
-		$this->req = $request;
-		$this->resp = $response;
-		parent::__construct($message, $code, $previous);
+    /**
+     * ResponseException constructor.
+     * @param string $message
+     * @param int $code
+     * @param \Exception|null $previous
+     * @param Request $request
+     * @param Response|null $response
+     */
+    public function __construct($message, $code, \Exception $previous = null, Request $request, Response $response = null)
+    {
+        $this->req = $request;
+        $this->resp = $response;
+        parent::__construct($message, $code, $previous);
 
-	}
+    }
 
-	public function getRequest() {
-		return $this->req;
-	}
+    /**
+     * Method getRequest description.
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->req;
+    }
 
-	public function getResponse() {
-		return $this->resp;
-	}
+    /**
+     * Method getResponse description.
+     *
+     * @return null|Response
+     */
+    public function getResponse()
+    {
+        return $this->resp;
+    }
 
-	public function hasResponse() {
-		return (bool)$this->getResponse();
-	}
+    /**
+     * Method hasResponse description.
+     *
+     * @return bool
+     */
+    public function hasResponse()
+    {
+        return (bool)$this->getResponse();
+    }
 }

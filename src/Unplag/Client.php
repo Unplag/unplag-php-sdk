@@ -1,6 +1,4 @@
-<?php
-
-namespace Unplag;
+<?php namespace Unplag;
 
 use GuzzleHttp\HandlerStack;
 
@@ -16,8 +14,14 @@ if (!defined('UNPLAG_API_BASE_URL'))
 	define('UNPLAG_API_BASE_URL', 'https://unplag.com/api/v2/');
 }
 
+
+/**
+ * Class Client
+ * @package Unplag
+ */
 class Client
 {
+    
 	protected static $keyRegex = '/^[A-z0-9]{16,32}$/';
 	protected static $secretRegex = '/^[A-z0-9]{32,64}$/';
 
@@ -29,6 +33,12 @@ class Client
 	 */
 	protected $client;
 
+
+    /**
+     * Client constructor.
+     * @param $key
+     * @param $secret
+     */
 	public function __construct($key, $secret)
 	{
 		if (!preg_match(static::$keyRegex, $key))
@@ -47,6 +57,9 @@ class Client
 		$this->createGuzzleClient();
 	}
 
+    /**
+     * Method createGuzzleClient description.
+     */
 	protected function createGuzzleClient()
 	{
 		$stack = HandlerStack::create();
@@ -67,6 +80,15 @@ class Client
 		]);
 	}
 
+    /**
+     * Method execute description.
+     * @param Request $request
+     *
+     * @return Response
+     * @throws ApiException
+     * @throws RequestException
+     * @throws ResponseException
+     */
 	public function execute(Request $request)
 	{
 
@@ -131,6 +153,13 @@ class Client
 		return $response;
 	}
 
+
+    /**
+     * Method _dumpResponse description.
+     * @param ResponseInterface $resp
+     *
+     * @return string
+     */
 	protected function _dumpResponse(ResponseInterface $resp)
 	{
 		$pattern = "Status: %d Body: %s";
@@ -138,9 +167,11 @@ class Client
 		return sprintf($pattern, $resp->getStatusCode(), $resp->getBody()->getContents());
 	}
 
-	/**
-	 * @return string
-	 */
+    /**
+     * Method getKey description.
+     *
+     * @return mixed
+     */
 	public function getKey()
 	{
 		return $this->key;

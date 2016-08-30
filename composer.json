@@ -1,5 +1,5 @@
 {
-	"name": "Unplag/unplag-php-sdk",
+	"name": "unplag/unplag-php-sdk",
 	"description": "An SDK built to facilitate application development for Unplag API 2.0+",
 	"minimum-stability": "stable",
 	"license": "MIT",
