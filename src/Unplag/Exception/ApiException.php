@@ -1,6 +1,5 @@
 <?php namespace Unplag\Exception;
 
-
 use Unplag\ApiError;
 use Unplag\Request;
 use Unplag\Response;
@@ -8,11 +7,6 @@ use Unplag\Response;
 /**
  * Class ApiException
  * @package Unplag\Exception
- *
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 12.03.16
- * Time: 17:40
  */
 class ApiException extends \Exception implements UnplagException
 {
