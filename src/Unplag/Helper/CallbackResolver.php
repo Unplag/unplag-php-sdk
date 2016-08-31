@@ -9,12 +9,6 @@ use Unplag\Response;
 class CallbackResolver
 {
     /**
-     * @var string
-     */
-    protected $content;
-
-
-    /**
      * @var array
      */
     protected $params = [];
@@ -56,18 +50,17 @@ class CallbackResolver
     /**
      * Method getParam description.
      * @param null $index
-     * @param null $default
      *
      * @return array|mixed|null
      */
-    public function getParam($index = null, $default = null)
+    public function getParam($index = null)
     {
         if( empty($index) )
         {
             return $this->params;
         }
         
-        return isset($this->params[$index]) ? $this->params[$index] : $default;
+        return isset($this->params[$index]) ? $this->params[$index] : null;
     }
 
 
