@@ -24,21 +24,19 @@ class CallbackResolver
      */
     public function __construct()
     {
-        $this->content = file_get_contents("php://input");
-        if( empty($this->content) )
-        {
-            throw new CallbackException('Collback content body is Empty');
-        }
-
         $contentType = $_SERVER['CONTENT_TYPE'];
-        if( strpos(Response::ACCEPT_MIME, $contentType) )
-        {
-            $this->setParams($this->content);
-        }
-        else
+        if( !strpos(Response::ACCEPT_MIME, $contentType) )
         {
             throw new CallbackException('Invalid MIME type');
         }
+
+        $this->content = file_get_contents("php://input");
+        if( empty($this->content) )
+        {
+            throw new CallbackException('Callback content body is empty');
+        }
+
+        $this->setParams($this->content);
 
     }
 
