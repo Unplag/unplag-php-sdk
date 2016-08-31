@@ -30,13 +30,13 @@ class CallbackResolver
             throw new CallbackException('Invalid MIME type');
         }
 
-        $this->content = file_get_contents("php://input");
-        if( empty($this->content) )
+        $content = file_get_contents("php://input");
+        if( empty($content) )
         {
             throw new CallbackException('Callback content body is empty');
         }
 
-        $this->setParams($this->content);
+        $this->setParams($content);
 
     }
 
