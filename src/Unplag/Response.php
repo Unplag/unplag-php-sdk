@@ -22,7 +22,8 @@ class Response
      */
     public function __construct(ResponseInterface $guzzle_response)
     {
-        if ($guzzle_response->getHeaderLine('Content-Type') !== static::ACCEPT_MIME) {
+        if ($guzzle_response->getHeaderLine('Content-Type') !== static::ACCEPT_MIME) 
+        {
             throw new \InvalidArgumentException("Invalid content type received from Unplag API");
         }
 
