@@ -2,6 +2,7 @@
 
 /**
  * Class CallbackResolver
+ * @package Unplag\Helper
  */
 class CallbackResolver
 {
@@ -16,7 +17,7 @@ class CallbackResolver
     public function __construct()
     {
 
-        foreach (getallheaders() as $name => $value)
+        foreach ($_SERVER as $name => $value)
         {
             echo "$name: $value\n";
         }
