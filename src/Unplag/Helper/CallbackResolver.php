@@ -25,7 +25,7 @@ class CallbackResolver
     public function __construct()
     {
         $contentType = $_SERVER['CONTENT_TYPE'];
-        if( !strpos(Response::ACCEPT_MIME, $contentType) )
+        if( strpos(Response::ACCEPT_MIME, $contentType) === false )
         {
             throw new CallbackException('Invalid MIME type');
         }
