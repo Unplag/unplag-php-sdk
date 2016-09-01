@@ -4,6 +4,7 @@ use Unplag\UnplagClient\CallbackTrait;
 use Unplag\UnplagClient\CheckTrait;
 use Unplag\UnplagClient\FileTrait;
 use Unplag\UnplagClient\IUnplag;
+use Unplag\Exception\UnexpectedResponseException;
 
 /**
  * Class Unplag
