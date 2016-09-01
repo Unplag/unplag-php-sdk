@@ -1,5 +1,6 @@
 <?php namespace Unplag;
 
+use Unplag\Exception\CallbackException;
 use Unplag\Exception\UnexpectedResponseException;
 
 /**
@@ -111,5 +112,31 @@ class Unplag
             'id' => $fileId
         ]);
         return $this->execute($req)->getExpectedDataProperty('file');
+    }
+
+    /**
+     * Method resolveCallback description.
+     *
+     * @return mixed
+     * @throws CallbackException
+     */
+    public function resolveCallback()
+    {
+        $contentType = $_SERVER['CONTENT_TYPE'];
+        if( strpos(Response::ACCEPT_MIME, $contentType) === false )
+        {
+            throw new CallbackException('Invalid MIME type');
+        }
+
+        $content = file_get_contents("php://input");
+        if( empty($content) )
+        {
+            throw new CallbackException('Callback content body is empty');
+        }
+
+        $unpacker = new \MessagePack\Unpacker();
+        $params = $unpacker->unpack($content);
+
+        return $params;
     }
 }
