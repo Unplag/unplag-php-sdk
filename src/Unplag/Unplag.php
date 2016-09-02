@@ -1,5 +1,6 @@
 <?php namespace Unplag;
 
+use Unplag\Check\CheckParam;
 use Unplag\UnplagClient\CallbackTrait;
 use Unplag\UnplagClient\Check;
 use Unplag\UnplagClient\CheckTrait;
@@ -129,13 +130,15 @@ class Unplag implements IUnplag
 
     /**
      * Method checkCreate description.
-     * @param Check $check
+     * @param CheckParam $checkParam
+     *
+     * @return array|null
+     * @throws UnexpectedResponseException
      */
-    public function checkCreate(Check $check)
+    public function checkCreate(CheckParam $checkParam)
     {
-
-        $req = new Request(Request::METHOD_POST, 'check/create', $check->);
-        
+        $req = new Request(Request::METHOD_POST, 'check/create', $checkParam->mergeParams());
+        return $this->execute($req)->getExpectedDataProperty('check');
     }
 
     

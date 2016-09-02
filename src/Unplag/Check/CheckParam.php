@@ -13,7 +13,7 @@ class CheckParam
     const TYPE_WEB_AND_MY_LIBRARY = "web_and_my_library";
 
     /**
-     * @var array
+     * @var array $typeMap
      */
     protected static $typeMap =
         [
@@ -30,9 +30,13 @@ class CheckParam
     protected $file_id;
 
     /**
-     * @var array
+     * @var int[]
      */
     protected $versus_files = [];
+
+    /**
+     * @var string $type
+     */
     protected $type;
 
     /**
@@ -42,13 +46,15 @@ class CheckParam
 
     /**
      * @var bool $exclude_citations
+     * @default false
      */
-    protected $exclude_citations;
+    protected $exclude_citations = false;
 
     /**
-     * @var bool $exclude_references
+     * @var bool $exclude_references (default: false)
+     * @default false
      */
-    protected $exclude_references;
+    protected $exclude_references = false;
 
     /**
      * CheckParam constructor.
@@ -56,33 +62,50 @@ class CheckParam
      */
     public function __construct($file_id)
     {
+        if( is_numeric($file_id) === false )
+        {
+            throw new CheckException("File ID must be Integer.");
+        }
+
+        $this->file_id = $file_id;
+        $this->type = self::TYPE_WEB; // set default type - WEB
 
     }
 
     /**
      * Method setType description.
      * @param $type
-     * @param array $versusFiles
+     * @param null $versusFiles
      *
      * @return $this
      * @throws CheckException
      */
     public function setType($type, $versusFiles = null)
     {
-
         if( array_search($type, self::$typeMap) === false )
         {
             throw new CheckException(
                 sprintf(
-                    "<b>Set invalid type: '%s'</b>. Allowed check type is '%s'",
-                    $type,
+                    "<b>Set invalid type: '{$type}'</b>. Allowed check type is '%s'",
                     implode("', '", self::$typeMap)
                 )
             );
         }
 
+        if( $type === self::TYPE_DOC_VS_DOC )
+        {
 
+            if( empty($versusFiles) )
+            {
+                throw new CheckException("Versus Files can not be empty for check type '{$type}'");
+            }
+            else
+            {
+                $this->versus_files = $versusFiles;
+            }
+        }
 
+        $this->type = $type;
         return $this;
     }
 
@@ -122,12 +145,34 @@ class CheckParam
         return $this;
     }
 
+    /**
+     * Method mergeParams description.
+     *
+     * @return array
+     */
+    public function mergeParams()
+    {
+        $params =
+            [
+                'file_id' => $this->file_id,
+                'type' => $this->type,
 
+                'exclude_citations' => $this->exclude_citations,
+                'exclude_references' => $this->exclude_references
+            ];
 
+        if( !empty($this->versus_files) )
+        {
+            $params['versus_files'] = $this->versus_files;
+        }
 
+        if( !empty($this->callback_url) )
+        {
+            $params['callback_url'] = $this->callback_url;
+        }
 
-
-
+        return $params;
+    }
 
 
 }
