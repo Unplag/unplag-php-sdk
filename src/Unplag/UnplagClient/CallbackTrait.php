@@ -26,7 +26,7 @@ trait CallbackTrait
     public function resolveCallback()
     {
         $contentType = $_SERVER['CONTENT_TYPE'];
-        if( strpos(Response::ACCEPT_MIME, $contentType) === false )
+        if( empty($contentType) || strpos(Response::ACCEPT_MIME, $contentType) === false )
         {
             throw new CallbackException('Invalid MIME type');
         }

@@ -141,6 +141,21 @@ class Unplag implements IUnplag
         return $this->execute($req)->getExpectedDataProperty('check');
     }
 
+    /**
+     * Method checkGetInfo description.
+     * @param int $checkId
+     *
+     * @return null
+     * @throws UnexpectedResponseException
+     */
+    public function checkGetInfo($checkId)
+    {
+        $req = new Request(Request::METHOD_GET, 'check/get', [
+            'id' => $checkId
+        ]);
+        return $this->execute($req)->getExpectedDataProperty('check');
+    }
+
     
 
 
