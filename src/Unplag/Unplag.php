@@ -1,6 +1,7 @@
 <?php namespace Unplag;
 
 use Unplag\UnplagClient\CallbackTrait;
+use Unplag\UnplagClient\Check;
 use Unplag\UnplagClient\CheckTrait;
 use Unplag\UnplagClient\FileTrait;
 use Unplag\UnplagClient\IUnplag;
@@ -123,6 +124,18 @@ class Unplag implements IUnplag
             'id' => $fileId
         ]);
         return $this->execute($req)->getExpectedDataProperty('file');
+    }
+
+
+    /**
+     * Method checkCreate description.
+     * @param Check $check
+     */
+    public function checkCreate(Check $check)
+    {
+
+        $req = new Request(Request::METHOD_POST, 'check/create', $check->);
+        
     }
 
     
