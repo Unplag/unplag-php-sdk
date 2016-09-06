@@ -3,8 +3,6 @@
 use Unplag\Check\CheckParam;
 use Unplag\UnplagClient\CallbackTrait;
 use Unplag\UnplagClient\Check;
-use Unplag\UnplagClient\CheckTrait;
-use Unplag\UnplagClient\FileTrait;
 use Unplag\UnplagClient\IUnplag;
 use Unplag\Exception\UnexpectedResponseException;
 
@@ -14,11 +12,13 @@ use Unplag\Exception\UnexpectedResponseException;
  */
 class Unplag implements IUnplag
 {
-    
-    use FileTrait;
-    use CheckTrait;
     use CallbackTrait;
-
+    
+    
+    const LANG_EN = 'en_EN';
+    const LANG_UA = 'uk_UA';
+    const LANG_ES = 'es_ES';
+    const LANG_BE = 'nl_BE';
     
     /**
      * @var Client
@@ -63,7 +63,6 @@ class Unplag implements IUnplag
     }
 
 
-
     /**
      * Method fileUpload description.
      * @param PayloadFile $file
@@ -89,6 +88,7 @@ class Unplag implements IUnplag
         $req = new Request(Request::METHOD_POST, 'file/upload', $params);
         return $this->execute($req)->getExpectedDataProperty('file');
     }
+
 
     /**
      * Method fileDelete description.
@@ -141,6 +141,7 @@ class Unplag implements IUnplag
         return $this->execute($req)->getExpectedDataProperty('check');
     }
 
+
     /**
      * Method checkGetInfo description.
      * @param int $checkId
@@ -156,7 +157,100 @@ class Unplag implements IUnplag
         return $this->execute($req)->getExpectedDataProperty('check');
     }
 
-    
+
+    /**
+     * Method checkDelete description.
+     * @param int $checkId
+     *
+     * @return mixed
+     * @throws UnexpectedResponseException
+     */
+    public function checkDelete($checkId)
+    {
+        $req = new Request(Request::METHOD_POST, 'check/delete', [
+            'id' => $checkId
+        ]);
+        $resp = $this->execute($req);
+        $checkData = $resp->getExpectedDataProperty('check');
+        if (!isset($checkData['id']))
+        {
+            throw new UnexpectedResponseException("Check delete response do not contain check ID. " . $resp, null, $resp);
+        }
+        return $checkData['id'];
+    }
+
+
+    /**
+     * Method checkGeneratePdf description.
+     * @param $checkId
+     * @param string $lang
+     *
+     * @return mixed
+     */
+    public function checkGeneratePdf($checkId, $lang = self::LANG_EN)
+    {
+        $req = new Request(Request::METHOD_POST, 'check/generate_pdf', [
+            'id' => $checkId,
+            'lang' => $lang
+        ]);
+        return $this->execute($req)->getExpectedDataProperty('pdf_report');
+    }
+
+
+    /**
+     * Method checkGetReportLink description.
+     * @param int $checkId
+     * @param string $lang
+     * @param bool $showLangPicker
+     *
+     * @return array
+     */
+    public function checkGetReportLink($checkId, $lang = self::LANG_EN,  $showLangPicker = false)
+    {
+        $req = new Request(Request::METHOD_GET, 'check/get_report_link', [
+            'id' => $checkId,
+            'lang' => $lang,
+            'show_lang_picker' => $showLangPicker
+        ]);
+        $res = $this->execute($req);
+        return [
+            'lang' => $res->getExpectedDataProperty('lang'),
+            'view_url' => $res->getExpectedDataProperty('view_url'),
+            'view_edit_url' => $res->getExpectedDataProperty('view_edit_url')
+        ];
+    }
+
+    /**
+     * Method checkToggleCitations description.
+     * @param int $checkId
+     * @param boolean $excludeCitations
+     * @param boolean $excludeReferences
+     *
+     * @return mixed
+     */
+    public function checkToggleCitations($checkId, $excludeCitations, $excludeReferences)
+    {
+        $req = new Request(Request::METHOD_POST, 'check/toggle', [
+            'id' => $checkId,
+            'exclude_citations' => $excludeCitations,
+            'exclude_references' => $excludeReferences
+        ]);
+        return $this->execute($req)->getExpectedDataProperty('check');
+    }
+
+    /**
+     * Method checkTrackProgress description.
+     * @param int[] $checkIds
+     *
+     * @return mixed
+     */
+    public function checkTrackProgress(array $checkIds)
+    {
+        $req = new Request(Request::METHOD_GET, 'check/progress', [
+            'id' => $checkIds
+        ]);
+        return $this->execute($req)->getExpectedDataProperty('progress');
+    }
 
 
 }
