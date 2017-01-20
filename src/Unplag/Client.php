@@ -22,7 +22,7 @@ class Client
 	protected $secret;
 
 	protected $apiHost = 'https://unplag.com';
-	protected $apiRootPath = '/api/v2';
+	protected $apiRootPath = '/api/v2/';
 
 	/**
 	 * @var \GuzzleHttp\Client
@@ -33,17 +33,18 @@ class Client
 	/**
 	 * Client constructor.
 	 *
-	 * @param $key
-	 * @param $secret
+	 * @param string $key
+	 * @param string $secret
+	 * @param array  $options
 	 */
 	public function __construct($key, $secret, array $options = [])
 	{
-		if(!preg_match(static::$keyRegex, $key))
+		if (!preg_match(static::$keyRegex, $key))
 		{
 			throw new \InvalidArgumentException("Invalid key $key");
 		}
 
-		if(!preg_match(static::$secretRegex, $secret))
+		if (!preg_match(static::$secretRegex, $secret))
 		{
 			throw new \InvalidArgumentException("Invalid secret $secret");
 		}
@@ -51,7 +52,7 @@ class Client
 		$this->key = $key;
 		$this->secret = $secret;
 
-		if(isset($options['host']))
+		if (isset($options['host']))
 		{
 			$this->apiHost = $options['host'];
 		}
@@ -67,18 +68,18 @@ class Client
 		$stack = HandlerStack::create();
 
 		$middleware = new Oauth1([
-			'consumer_key' => $this->key,
+			'consumer_key'    => $this->key,
 			'consumer_secret' => $this->secret,
-			'token_secret' => '',
-			'token' => '',
+			'token_secret'    => '',
+			'token'           => '',
 		]);
 
 		$stack->push($middleware);
 
 		$this->client = new \GuzzleHttp\Client([
 			'base_uri' => $this->getBaseUrl(),
-			'handler' => $stack,
-			'auth' => 'oauth'
+			'handler'  => $stack,
+			'auth'     => 'oauth'
 		]);
 	}
 
@@ -106,9 +107,9 @@ class Client
 		{
 			$guzzle_response = $this->client->send($request->makeGuzzleRequest());
 		}
-		catch(\GuzzleHttp\Exception\RequestException $ex)
+		catch (\GuzzleHttp\Exception\RequestException $ex)
 		{
-			if(!$ex->hasResponse())
+			if (!$ex->hasResponse())
 			{
 				throw new RequestException($ex->getMessage(), $ex->getCode(), $ex, $request);
 			}
@@ -117,9 +118,9 @@ class Client
 			{
 				$response = new Response($ex->getResponse());
 			}
-			catch(\Exception $ex2)
+			catch (\Exception $ex2)
 			{
-				if($ex instanceof \InvalidArgumentException)
+				if ($ex instanceof \InvalidArgumentException)
 				{
 					$code = ResponseException::CODE_INVALID_CONTENT_TYPE;
 				}
@@ -132,7 +133,7 @@ class Client
 
 			throw new ApiException($request, $response, $ex);
 		}
-		catch(\Exception $ex)
+		catch (\Exception $ex)
 		{
 			throw new RequestException($ex->getMessage(), $ex->getCode(), $ex, $request);
 		}
@@ -142,9 +143,9 @@ class Client
 		{
 			$response = new Response($guzzle_response);
 		}
-		catch(\Exception $ex)
+		catch (\Exception $ex)
 		{
-			if($ex instanceof \InvalidArgumentException)
+			if ($ex instanceof \InvalidArgumentException)
 			{
 				$code = ResponseException::CODE_INVALID_CONTENT_TYPE;
 			}
@@ -155,7 +156,7 @@ class Client
 			throw new ResponseException("Response parse failed. Resp: " . $this->_dumpResponse($guzzle_response), $code, $ex, $request, null);
 		}
 
-		if(!$response->isSuccess())
+		if (!$response->isSuccess())
 		{
 			throw new ApiException($request, $response);
 		}

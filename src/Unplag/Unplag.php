@@ -67,10 +67,10 @@ class Unplag implements IUnplag
 	/**
 	 * @param PayloadFile $file
 	 * @param string $format
-	 * @param null $name
-	 * @param int $directoryId (default: 0)
+	 * @param string $name Optional (default: random generated)
+	 * @param int $directoryId Optional (default: 0)
 	 *
-	 * @return null
+	 * @return array
 	 * @throws UnexpectedResponseException
 	 */
 	public function fileUpload(PayloadFile $file, $format, $name = null, $directoryId = null)
@@ -98,7 +98,7 @@ class Unplag implements IUnplag
 
 
 	/**
-	 * @param $fileId
+	 * @param int $fileId
 	 *
 	 * @return int
 	 * @throws UnexpectedResponseException
@@ -120,9 +120,9 @@ class Unplag implements IUnplag
 
 
 	/**
-	 * @param $fileId
+	 * @param int $fileId
 	 *
-	 * @return null
+	 * @return array File info
 	 *
 	 * @throws UnexpectedResponseException
 	 */
@@ -139,7 +139,7 @@ class Unplag implements IUnplag
 	/**
 	 * @param CheckParam $checkParam
 	 *
-	 * @return array|null
+	 * @return array Check info
 	 *
 	 * @throws UnexpectedResponseException
 	 */
@@ -154,7 +154,7 @@ class Unplag implements IUnplag
 	/**
 	 * @param int $checkId
 	 *
-	 * @return mixed
+	 * @return array Check info
 	 *
 	 * @throws UnexpectedResponseException
 	 */
@@ -171,7 +171,7 @@ class Unplag implements IUnplag
 	/**
 	 * @param int $checkId
 	 *
-	 * @return int
+	 * @return int ID of deleted check
 	 *
 	 * @throws UnexpectedResponseException
 	 */
@@ -196,10 +196,10 @@ class Unplag implements IUnplag
 
 
 	/**
-	 * @param $checkId
-	 * @param string $lang
+	 * @param int $checkId
+	 * @param string $lang Optional (Default: LANG_EN)
 	 *
-	 * @return mixed
+	 * @return array PDF report info
 	 */
 	public function checkGeneratePdf($checkId, $lang = self::LANG_EN)
 	{
@@ -214,10 +214,10 @@ class Unplag implements IUnplag
 
 	/**
 	 * @param int $checkId
-	 * @param string $lang
-	 * @param bool $showLangPicker
+	 * @param string $lang Optional (default: LANG_EN)
+	 * @param bool $showLangPicker Optional (default: false)
 	 *
-	 * @return array
+	 * @return array ["lang" => lang, "view_url" => ..., "view_edit_url" => ...]
 	 */
 	public function checkGetReportLink($checkId, $lang = self::LANG_EN, $showLangPicker = false)
 	{
@@ -240,7 +240,7 @@ class Unplag implements IUnplag
 	 * @param boolean $excludeCitations
 	 * @param boolean $excludeReferences
 	 *
-	 * @return mixed
+	 * @return array Check info
 	 */
 	public function checkToggleCitations($checkId, $excludeCitations, $excludeReferences)
 	{
@@ -254,9 +254,9 @@ class Unplag implements IUnplag
 	}
 
 	/**
-	 * @param int[] $checkIds
+	 * @param int[] $checkIds Array of checks to track progress
 	 *
-	 * @return mixed
+	 * @return array [check ID => progress]
 	 */
 	public function checkTrackProgress(array $checkIds)
 	{
