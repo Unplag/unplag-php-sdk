@@ -184,7 +184,11 @@ class Unplag implements IUnplag
 		$checkData = $resp->getExpectedDataProperty('check');
 		if(false === isset($checkData['id']))
 		{
-			throw new UnexpectedResponseException("Check delete response do not contain check ID. " . $resp, null, $resp);
+			throw new UnexpectedResponseException(
+				"Check delete response do not contain check ID. " . $resp,
+				null,
+				$resp
+			);
 		}
 
 		return $checkData['id'];
@@ -271,10 +275,14 @@ class Unplag implements IUnplag
 	public function directoryGet($directoryId = 0)
 	{
 		$req = new Request(Request::METHOD_GET, 'directory/get', [
-			'id' => $directoryId
+			'id' => $directoryId,
+			'list' => 1
 		]);
 
-		return $this->execute($req)->getExpectedDataProperty('directory');
+		return [
+			'directory' => $this->execute($req)->getExpectedDataProperty('directory'),
+			'list' => $this->execute($req)->getExpectedDataProperty('list')
+		];
 	}
 
 	/**
@@ -313,10 +321,14 @@ class Unplag implements IUnplag
 		]);
 
 		$resp = $this->execute($req);
-		$directoryData = $resp->getExpectedDataProperty('directory');
+		$directoryData = $resp->getExpectedDataProperty('id');
 		if(false === isset($directoryData['id']))
 		{
-			throw new UnexpectedResponseException("Directory delete response do not contain directory ID. " . $resp, null, $resp);
+			throw new UnexpectedResponseException(
+				"Directory delete response do not contain directory ID. " . $resp,
+				null,
+				$resp
+			);
 		}
 
 		return $directoryData['id'];
