@@ -1,20 +1,25 @@
-<?php
-/**
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 14.03.16
- * Time: 10:15
- */
+<?php namespace Unplag\Exception;
 
-namespace Unplag\Exception;
 
 use Unplag\Response;
 
+/**
+ * Class UnexpectedResponseException
+ * @package Unplag\Exception
+ */
 class UnexpectedResponseException extends \Exception implements UnplagException
 {
+
 	const CODE_UNEXPECTED_RESPONSE = 601;
 	protected $response;
 
+	/**
+	 * UnexpectedResponseException constructor.
+	 *
+	 * @param string $message
+	 * @param \Exception|null $previous
+	 * @param Response $response
+	 */
 	public function __construct($message, \Exception $previous = null, Response $response)
 	{
 		parent::__construct($message, static::CODE_UNEXPECTED_RESPONSE, $previous);
@@ -22,6 +27,8 @@ class UnexpectedResponseException extends \Exception implements UnplagException
 	}
 
 	/**
+	 * Method getResponse description.
+	 *
 	 * @return Response
 	 */
 	public function getResponse()

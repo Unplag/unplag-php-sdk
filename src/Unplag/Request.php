@@ -1,11 +1,13 @@
-<?php
-
-namespace Unplag;
+<?php namespace Unplag;
 
 
 use GuzzleHttp\Psr7\Uri;
 use Unplag\Exception\UnplagException;
 
+/**
+ * Class Request
+ * @package Unplag
+ */
 class Request
 {
 
@@ -17,9 +19,17 @@ class Request
 	protected $uri;
 	protected $payload;
 
+	/**
+	 * Request constructor.
+	 *
+	 * @param $method
+	 * @param $uri
+	 * @param array $payload
+	 */
 	public function __construct($method, $uri, $payload = [])
 	{
-		if(!in_array($method, [static::METHOD_GET, static::METHOD_POST])) {
+		if(!in_array($method, [static::METHOD_GET, static::METHOD_POST]))
+		{
 			throw new \InvalidArgumentException("Invalid method $method");
 		}
 		$this->method = $method;
@@ -27,6 +37,14 @@ class Request
 		$this->payload = $payload;
 	}
 
+	/**
+	 * Method payloadSet description.
+	 *
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return $this
+	 */
 	public function payloadSet($key, $value)
 	{
 		$this->payload[$key] = $value;
@@ -34,11 +52,25 @@ class Request
 		return $this;
 	}
 
+	/**
+	 * Method payloadGet description.
+	 *
+	 * @param $key
+	 *
+	 * @return mixed|null
+	 */
 	public function payloadGet($key)
 	{
 		return isset($this->payload[$key]) ? $this->payload[$key] : null;
 	}
 
+	/**
+	 * Method payloadUnset description.
+	 *
+	 * @param $key
+	 *
+	 * @return $this
+	 */
 	public function payloadUnset($key)
 	{
 		unset($this->payload[$key]);
@@ -46,14 +78,21 @@ class Request
 		return $this;
 	}
 
+
+	/**
+	 * Method packPayload description.
+	 *
+	 * @return string
+	 * @throws Exception\PayloadException
+	 */
 	protected function packPayload()
 	{
 		$packer = new \MessagePack\Packer;
 
 		$data = [];
-		foreach ($this->payload as $key => &$value)
+		foreach($this->payload as $key => &$value)
 		{
-			if ($value instanceof PayloadFile)
+			if($value instanceof PayloadFile)
 			{
 				$data[$key] = &$value->getBinaryData();
 			}
@@ -67,6 +106,12 @@ class Request
 		return $packer->packMap($data);
 	}
 
+
+	/**
+	 * Method makeGuzzleRequest description.
+	 *
+	 * @return \GuzzleHttp\Psr7\Request
+	 */
 	public function makeGuzzleRequest()
 	{
 		$headers = [
@@ -75,11 +120,13 @@ class Request
 		];
 
 		$uri = new Uri($this->uri);
-		if($this->method == self::METHOD_GET) {
+		if($this->method == self::METHOD_GET)
+		{
 			$body = null;
 			$new_uri = $uri->withQuery(http_build_query($this->payload));
 		}
-		else {
+		else
+		{
 			$body = $this->packPayload();
 			$new_uri = $uri;
 		}
@@ -87,19 +134,31 @@ class Request
 		return new \GuzzleHttp\Psr7\Request($this->method, $new_uri, $headers, $body);
 	}
 
+
+	/**
+	 * Method __debugInfo description.
+	 *
+	 * @return array
+	 */
 	public function __debugInfo()
 	{
 		return [
 			'method' => $this->method,
-		    'uri' => $this->uri,
-		    'payload' => $this->payload
+			'uri' => $this->uri,
+			'payload' => $this->payload
 		];
 	}
 
+	/**
+	 * Method __toString description.
+	 *
+	 * @return string
+	 */
 	public function __toString()
 	{
 		ob_start();
 		var_dump($this);
+
 		return 'Unplag\Request: ' . ob_get_clean();
 	}
 }

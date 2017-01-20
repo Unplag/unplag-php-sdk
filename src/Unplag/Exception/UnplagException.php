@@ -1,12 +1,9 @@
-<?php
+<?php namespace Unplag\Exception;
+
 /**
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 12.03.16
- * Time: 14:35
+ * Interface UnplagException
+ * @package Unplag\Exception
  */
-
-namespace Unplag\Exception;
-
-
-interface UnplagException {}
+interface UnplagException
+{
+}

@@ -1,14 +1,10 @@
-<?php
+<?php namespace Unplag;
+
+
 /**
- * Created by IntelliJ IDEA.
- * User: egormelnikov
- * Date: 12.03.16
- * Time: 18:53
+ * Class ApiError
+ * @package Unplag
  */
-
-namespace Unplag;
-
-
 class ApiError
 {
 	protected $code;
@@ -30,6 +26,8 @@ class ApiError
 	}
 
 	/**
+	 * Method getCode description.
+	 *
 	 * @return mixed
 	 */
 	public function getCode()
@@ -38,6 +36,8 @@ class ApiError
 	}
 
 	/**
+	 * Method getMsg description.
+	 *
 	 * @return mixed
 	 */
 	public function getMsg()
@@ -46,6 +46,8 @@ class ApiError
 	}
 
 	/**
+	 * Method getHttpStatusCode description.
+	 *
 	 * @return mixed
 	 */
 	public function getHttpStatusCode()
@@ -53,9 +55,16 @@ class ApiError
 		return $this->httpStatusCode;
 	}
 
+
+	/**
+	 * Method __toString description.
+	 *
+	 * @return string
+	 */
 	public function __toString()
 	{
 		$pattern = "Unplag API error. Code: %s; Msg: %s; HTTP status code: %d";
+
 		return sprintf($pattern, $this->getCode(), $this->getMsg(), $this->getHttpStatusCode());
 	}
 }

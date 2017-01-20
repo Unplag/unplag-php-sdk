@@ -1,42 +1,49 @@
-<?php
+<?php namespace Unplag;
 
-namespace Unplag;
 
 use GuzzleHttp\HandlerStack;
-
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Psr\Http\Message\ResponseInterface;
 use Unplag\Exception\ApiException;
 use Unplag\Exception\RequestException;
 use Unplag\Exception\ResponseException;
 
-
-if (!defined('UNPLAG_API_BASE_URL'))
-{
-	define('UNPLAG_API_BASE_URL', 'https://unplag.com/api/v2/');
-}
-
+/**
+ * Class Client
+ * @package Unplag
+ */
 class Client
 {
+
 	protected static $keyRegex = '/^[A-z0-9]{16,32}$/';
 	protected static $secretRegex = '/^[A-z0-9]{32,64}$/';
 
 	protected $key;
 	protected $secret;
 
+	protected $apiHost = 'https://unplag.com';
+	protected $apiRootPath = '/api/v2';
+
 	/**
 	 * @var \GuzzleHttp\Client
 	 */
 	protected $client;
 
-	public function __construct($key, $secret)
+
+	/**
+	 * Client constructor.
+	 *
+	 * @param $key
+	 * @param $secret
+	 */
+	public function __construct($key, $secret, array $options = [])
 	{
-		if (!preg_match(static::$keyRegex, $key))
+		if(!preg_match(static::$keyRegex, $key))
 		{
 			throw new \InvalidArgumentException("Invalid key $key");
 		}
 
-		if (!preg_match(static::$secretRegex, $secret))
+		if(!preg_match(static::$secretRegex, $secret))
 		{
 			throw new \InvalidArgumentException("Invalid secret $secret");
 		}
@@ -44,9 +51,17 @@ class Client
 		$this->key = $key;
 		$this->secret = $secret;
 
+		if(isset($options['host']))
+		{
+			$this->apiHost = $options['host'];
+		}
+
 		$this->createGuzzleClient();
 	}
 
+	/**
+	 * Method createGuzzleClient description.
+	 */
 	protected function createGuzzleClient()
 	{
 		$stack = HandlerStack::create();
@@ -61,22 +76,39 @@ class Client
 		$stack->push($middleware);
 
 		$this->client = new \GuzzleHttp\Client([
-			'base_uri' => UNPLAG_API_BASE_URL,
+			'base_uri' => $this->getBaseUrl(),
 			'handler' => $stack,
 			'auth' => 'oauth'
 		]);
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getBaseUrl()
+	{
+		return $this->apiHost . $this->apiRootPath;
+	}
+
+	/**
+	 * Method execute description.
+	 *
+	 * @param Request $request
+	 *
+	 * @return Response
+	 * @throws ApiException
+	 * @throws RequestException
+	 * @throws ResponseException
+	 */
 	public function execute(Request $request)
 	{
-
 		try
 		{
 			$guzzle_response = $this->client->send($request->makeGuzzleRequest());
 		}
-		catch (\GuzzleHttp\Exception\RequestException $ex)
+		catch(\GuzzleHttp\Exception\RequestException $ex)
 		{
-			if (!$ex->hasResponse())
+			if(!$ex->hasResponse())
 			{
 				throw new RequestException($ex->getMessage(), $ex->getCode(), $ex, $request);
 			}
@@ -85,9 +117,9 @@ class Client
 			{
 				$response = new Response($ex->getResponse());
 			}
-			catch (\Exception $ex2)
+			catch(\Exception $ex2)
 			{
-				if ($ex instanceof \InvalidArgumentException)
+				if($ex instanceof \InvalidArgumentException)
 				{
 					$code = ResponseException::CODE_INVALID_CONTENT_TYPE;
 				}
@@ -100,7 +132,7 @@ class Client
 
 			throw new ApiException($request, $response, $ex);
 		}
-		catch (\Exception $ex)
+		catch(\Exception $ex)
 		{
 			throw new RequestException($ex->getMessage(), $ex->getCode(), $ex, $request);
 		}
@@ -110,9 +142,9 @@ class Client
 		{
 			$response = new Response($guzzle_response);
 		}
-		catch (\Exception $ex)
+		catch(\Exception $ex)
 		{
-			if ($ex instanceof \InvalidArgumentException)
+			if($ex instanceof \InvalidArgumentException)
 			{
 				$code = ResponseException::CODE_INVALID_CONTENT_TYPE;
 			}
@@ -123,7 +155,7 @@ class Client
 			throw new ResponseException("Response parse failed. Resp: " . $this->_dumpResponse($guzzle_response), $code, $ex, $request, null);
 		}
 
-		if (!$response->isSuccess())
+		if(!$response->isSuccess())
 		{
 			throw new ApiException($request, $response);
 		}
@@ -131,6 +163,14 @@ class Client
 		return $response;
 	}
 
+
+	/**
+	 * Method _dumpResponse description.
+	 *
+	 * @param ResponseInterface $resp
+	 *
+	 * @return string
+	 */
 	protected function _dumpResponse(ResponseInterface $resp)
 	{
 		$pattern = "Status: %d Body: %s";
@@ -139,7 +179,9 @@ class Client
 	}
 
 	/**
-	 * @return string
+	 * Method getKey description.
+	 *
+	 * @return mixed
 	 */
 	public function getKey()
 	{
