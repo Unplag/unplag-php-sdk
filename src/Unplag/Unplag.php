@@ -261,7 +261,7 @@ class Unplag implements IUnplag
 	public function checkTrackProgress(array $checkIds)
 	{
 		$req = new Request(Request::METHOD_GET, 'check/progress', [
-			'id' => $checkIds
+			'id' => implode(',', $checkIds)
 		]);
 
 		return $this->execute($req)->getExpectedDataProperty('progress');
