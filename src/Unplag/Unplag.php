@@ -267,6 +267,20 @@ class Unplag implements IUnplag
 		return $this->execute($req)->getExpectedDataProperty('progress');
 	}
 
+    /**
+     * @param int $checkId
+     *
+     * @return null
+     */
+	public function checkGetSourcesList($checkId)
+	{
+		$req = new Request(Request::METHOD_GET, 'check/get_sources_list', [
+			'id' => $checkId
+		]);
+
+		return $this->execute($req)->getExpectedDataProperty('sources');
+	}
+
 	/**
 	 * @param int $directoryId (Default: 0 - root directory)
 	 *
@@ -333,6 +347,4 @@ class Unplag implements IUnplag
 
 		return $directoryData['id'];
 	}
-
-
 }

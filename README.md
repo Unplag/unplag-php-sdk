@@ -1,6 +1,6 @@
 # unplag-php-sdk
 
-**Stability: beta**
+[![Packagist](https://img.shields.io/packagist/v/unplag/unplag-php-sdk.svg?style=flat-square)](https://packagist.org/packages/unplag/unplag-php-sdk)
 
 PHP SDK for Unplag.com API 2.0+.  
 SDK implements API methods in PHP OOP way.
@@ -9,9 +9,6 @@ SDK implements API methods in PHP OOP way.
 #### Using composer
 Package is not submitted to packagist.org, so you should add github repo to composer config
 ```bash
-#Add unplag sdk repository
-php composer.phar config repositories.unplag-sdk git https://github.com/Unplag/unplag-php-sdk
-
 #Require unplag sdk
 php composer.phar require unplag/unplag-php-sdk
 ```

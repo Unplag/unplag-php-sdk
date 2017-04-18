@@ -3,7 +3,6 @@
 	"description": "An SDK built to facilitate application development for Unplag API 2.0+",
 	"minimum-stability": "stable",
 	"license": "MIT",
-	"version": "0.0.1-beta",
 	"keywords": [
 		"Unplag",
 		"plagiarism",
