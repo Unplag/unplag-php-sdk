@@ -21,7 +21,7 @@ class Client
 	protected $key;
 	protected $secret;
 
-	protected $apiHost = 'https://unplag.com';
+	protected $apiHost = 'https://corpapi.unicheck.com';
 	protected $apiRootPath = '/api/v2/';
 
 	/**
