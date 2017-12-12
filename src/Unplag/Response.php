@@ -125,7 +125,7 @@ class Response
 	public function getExpectedDataProperty($key)
 	{
 		$propData = $this->getDataProperty($key);
-		if(!$propData)
+		if($propData === null)
 		{
 			throw new UnexpectedResponseException("Response $key property not found. Resp: " . $this, null, $this);
 		}
